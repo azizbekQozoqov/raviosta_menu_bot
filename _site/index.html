@@ -1,1 +1,547 @@
-Hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Raviosta Kitchen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style type="text/tailwindcss">
+    :root {
+      --primary-color: #FF694B;
+      --secondary-color: #F7F7F7;
+      --background-light: #FFFFFF;
+      --background-dark: #121212;
+      --card-light: #FFFFFF;
+      --card-dark: #1E1E1E;
+      --text-light: #1F2937;
+      --text-dark: #F3F4F6;
+      --text-secondary-light: #6B7280;
+      --text-secondary-dark: #9CA3AF;
+    }
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
+    .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+    .dark .dark\:shadow-glow {
+        box-shadow: 0 0 20px 0 rgba(255, 105, 75, 0.3);
+    }
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+<div class="max-w-md mx-auto" id="root">
+<header class="p-4 sticky top-0 z-20 bg-background-light dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-color">restaurant</span>
+</div>
+<h1 class="text-xl font-bold">Raviosta Kitchen</h1>
+</div>
+<div class="flex items-center space-x-2">
+<button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</header>
+<main class="p-4 pb-24">
+
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center space-x-1 bg-gray-100 dark:bg-card-dark p-1 rounded-full">
+<button class="p-2 rounded-full bg-[var(--primary-color)] text-white">
+<span class="material-symbols-outlined !text-base">language</span>
+</button>
+<button class="p-2 rounded-full text-text-secondary-light dark:text-text-secondary-dark">
+<span class="material-symbols-outlined !text-base">light_mode</span>
+</button>
+</div>
+<button class="flex items-center space-x-1 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark">
+<span>Til: O'zb</span>
+<span class="material-symbols-outlined !text-xl">expand_more</span>
+</button>
+</div>
+<div class="mb-6">
+<div class="flex space-x-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+<button class="category-btn px-5 py-2.5 text-sm font-semibold text-white bg-[var(--primary-color)] rounded-full whitespace-nowrap shadow-md dark:shadow-glow" data-category="all">All</button>
+<button class="category-btn px-5 py-2.5 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark bg-card-light dark:bg-card-dark rounded-full whitespace-nowrap shadow-sm" data-category="appetizers">Appetizers</button>
+<button class="category-btn px-5 py-2.5 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark bg-card-light dark:bg-card-dark rounded-full whitespace-nowrap shadow-sm" data-category="main">Main Courses</button>
+<button class="category-btn px-5 py-2.5 text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark bg-card-light dark:bg-card-dark rounded-full whitespace-nowrap shadow-sm" data-category="desserts">Desserts</button>
+</div>
+</div>
+<div id="menu-items" class="grid grid-cols-2 gap-x-4 gap-y-6">
+<!-- Menu items will be populated by JavaScript -->
+</div>
+</main>
+
+<!-- Order Summary -->
+<div id="order-summary" class="fixed bottom-20 left-0 right-0 max-w-md mx-auto bg-card-light/80 dark:bg-card-dark/80 backdrop-blur-lg rounded-t-2xl shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.1)] p-4 transform transition-transform duration-300 translate-y-full">
+  <div class="flex justify-between items-center mb-3">
+    <div>
+      <span id="item-count" class="font-bold">0 items</span>
+      <span id="total-price" class="ml-2 text-[var(--primary-color)] font-bold">0 so'm</span>
+    </div>
+    <button id="order-btn" class="px-6 py-2 text-sm font-semibold text-white bg-[var(--primary-color)] rounded-full hover:bg-opacity-90">
+      Order Now
+    </button>
+  </div>
+  <div id="order-items-list" class="max-h-32 overflow-y-auto">
+    <!-- Order items will be populated here -->
+  </div>
+</div>
+
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-card-light/80 dark:bg-card-dark/80 backdrop-blur-lg border-t border-gray-200 dark:border-gray-700 rounded-t-2xl shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.1)]">
+<div class="flex justify-around items-center h-20">
+<a class="flex flex-col items-center text-[var(--primary-color)] relative" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-xs font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center text-text-secondary-light dark:text-text-secondary-dark" href="#">
+<span class="material-symbols-outlined">fastfood</span>
+<span class="text-xs font-medium">Orders</span>
+</a>
+<a class="flex flex-col items-center text-text-secondary-light dark:text-text-secondary-dark relative" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span id="cart-badge" class="cart-badge hidden">0</span>
+<span class="text-xs font-medium">Cart</span>
+</a>
+<a class="flex flex-col items-center text-text-secondary-light dark:text-text-secondary-dark" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-xs font-medium">Profile</span>
+</a>
+</div>
+</nav>
+
+<!-- Order Form Modal -->
+<div id="order-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+  <div class="bg-white dark:bg-card-dark rounded-2xl w-full max-w-md max-h-screen overflow-y-auto">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold">Complete Your Order</h3>
+        <button id="close-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      
+      <form id="order-form">
+        <div class="mb-4">
+          <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="name">
+            Full Name
+          </label>
+          <input class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] dark:bg-card-dark" 
+                 id="name" type="text" placeholder="Your name" required>
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="phone">
+            Phone Number
+          </label>
+          <input class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] dark:bg-card-dark" 
+                 id="phone" type="tel" placeholder="Your phone number" required>
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="address">
+            Delivery Address
+          </label>
+          <textarea class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] dark:bg-card-dark" 
+                    id="address" rows="3" placeholder="Your delivery address" required></textarea>
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="notes">
+            Special Instructions
+          </label>
+          <textarea class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] dark:bg-card-dark" 
+                    id="notes" rows="2" placeholder="Any special requests"></textarea>
+        </div>
+        
+        <div class="mb-6">
+          <h4 class="font-bold mb-3 text-lg">Order Summary</h4>
+          <div id="modal-order-summary" class="text-sm space-y-2">
+            <!-- Order items will be populated here -->
+          </div>
+          <div class="flex justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-700 font-bold text-lg">
+            <span>Total:</span>
+            <span id="modal-total" class="text-[var(--primary-color)]">0 so'm</span>
+          </div>
+        </div>
+        
+        <div class="flex space-x-3">
+          <button type="button" id="cancel-order" class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 font-medium">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 px-4 py-3 bg-[var(--primary-color)] text-white rounded-xl font-bold hover:bg-opacity-90">
+            Place Order
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 p-4">
+  <div class="bg-white dark:bg-card-dark rounded-2xl w-full max-w-md p-6 text-center">
+    <div class="text-green-500 text-5xl mb-4">
+      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+    </div>
+    <h3 class="text-xl font-bold mb-2">Order Placed Successfully!</h3>
+    <p class="mb-6 text-gray-600 dark:text-gray-400">Your order has been received and will be prepared shortly.</p>
+    <button id="close-success" class="w-full px-6 py-3 bg-[var(--primary-color)] text-white rounded-xl font-bold hover:bg-opacity-90">
+      OK
+    </button>
+  </div>
+</div>
+
+</div>
+
+<script>
+// Menu data
+const menuItems = [
+  {
+    id: 1,
+    name: "Plov",
+    description: "Traditional Uzbek rice dish with lamb, carrots, and spices",
+    price: 35000,
+    category: "main",
+    image: "https://images.unsplash.com/photo-1563379091339-03246963d96f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 2,
+    name: "Samsa",
+    description: "Baked pastry filled with minced meat and onions",
+    price: 8000,
+    category: "appetizers",
+    image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 3,
+    name: "Shashlik",
+    description: "Grilled skewered meat marinated in spices",
+    price: 28000,
+    category: "main",
+    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 4,
+    name: "Lagman",
+    description: "Hand-pulled noodles with vegetables and meat in broth",
+    price: 25000,
+    category: "main",
+    image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 5,
+    name: "Manti",
+    description: "Steamed dumplings filled with meat and onions",
+    price: 22000,
+    category: "appetizers",
+    image: "https://images.unsplash.com/photo-1606755962773-d324e74534a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 6,
+    name: "Chak-Chak",
+    description: "Traditional dessert made from honey and fried dough",
+    price: 15000,
+    category: "desserts",
+    image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 7,
+    name: "Green Tea",
+    description: "Traditional Uzbek green tea served in a piala",
+    price: 5000,
+    category: "drinks",
+    image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 8,
+    name: "Non Bread",
+    description: "Traditional round bread with patterned center",
+    price: 4000,
+    category: "appetizers",
+    image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+  }
+];
+
+// Current order
+let currentOrder = [];
+let currentCategory = 'all';
+
+// DOM elements
+const menuItemsContainer = document.getElementById('menu-items');
+const itemCountElement = document.getElementById('item-count');
+const totalPriceElement = document.getElementById('total-price');
+const orderBtn = document.getElementById('order-btn');
+const orderModal = document.getElementById('order-modal');
+const successModal = document.getElementById('success-modal');
+const orderForm = document.getElementById('order-form');
+const modalOrderSummary = document.getElementById('modal-order-summary');
+const modalTotalElement = document.getElementById('modal-total');
+const categoryButtons = document.querySelectorAll('.category-btn');
+const orderSummary = document.getElementById('order-summary');
+const orderItemsList = document.getElementById('order-items-list');
+const cartBadge = document.getElementById('cart-badge');
+
+// Initialize the app
+function init() {
+  renderMenuItems();
+  setupEventListeners();
+  updateOrderSummary();
+}
+
+// Render menu items based on current category
+function renderMenuItems() {
+  menuItemsContainer.innerHTML = '';
+  
+  const filteredItems = currentCategory === 'all' 
+    ? menuItems 
+    : menuItems.filter(item => item.category === currentCategory);
+  
+  filteredItems.forEach(item => {
+    const itemElement = document.createElement('div');
+    itemElement.className = 'bg-card-light dark:bg-card-dark rounded-2xl shadow-md overflow-hidden group';
+    itemElement.innerHTML = `
+      <div class="relative">
+        <img src="${item.image}" alt="${item.name}" class="w-full h-36 object-cover">
+        <button class="absolute top-2 right-2 p-1.5 rounded-full bg-white/70 dark:bg-black/50 backdrop-blur-sm text-gray-400">
+          <span class="material-symbols-outlined !text-xl">star</span>
+        </button>
+      </div>
+      <div class="p-3">
+        <h3 class="font-semibold text-md text-text-light dark:text-text-dark truncate">${item.name}</h3>
+        <p class="text-sm text-text-secondary-light dark:text-text-secondary-dark mb-3">${item.price.toLocaleString()} so'm</p>
+        <button class="add-to-cart w-full px-4 py-2 text-sm font-semibold text-white bg-[var(--primary-color)] rounded-full hover:bg-opacity-90 transition-all duration-300 transform group-hover:scale-105" data-id="${item.id}">
+          Qo'shish
+        </button>
+      </div>
+    `;
+    menuItemsContainer.appendChild(itemElement);
+  });
+}
+
+// Setup event listeners
+function setupEventListeners() {
+  // Category buttons
+  categoryButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active class from all buttons
+      categoryButtons.forEach(btn => {
+        btn.classList.remove('bg-[var(--primary-color)]', 'text-white', 'font-semibold', 'shadow-md', 'dark:shadow-glow');
+        btn.classList.add('text-text-secondary-light', 'dark:text-text-secondary-dark', 'bg-card-light', 'dark:bg-card-dark', 'font-medium', 'shadow-sm');
+      });
+      
+      // Add active class to clicked button
+      button.classList.remove('text-text-secondary-light', 'dark:text-text-secondary-dark', 'bg-card-light', 'dark:bg-card-dark', 'font-medium', 'shadow-sm');
+      button.classList.add('bg-[var(--primary-color)]', 'text-white', 'font-semibold', 'shadow-md', 'dark:shadow-glow');
+      
+      // Update current category and re-render
+      currentCategory = button.getAttribute('data-category');
+      renderMenuItems();
+    });
+  });
+
+  // Add to cart buttons (delegated event)
+  menuItemsContainer.addEventListener('click', (e) => {
+    if (e.target.closest('.add-to-cart')) {
+      const itemId = parseInt(e.target.closest('.add-to-cart').getAttribute('data-id'));
+      addToOrder(itemId);
+    }
+  });
+
+  // Order button
+  orderBtn.addEventListener('click', openOrderModal);
+
+  // Modal close buttons
+  document.getElementById('close-modal').addEventListener('click', closeOrderModal);
+  document.getElementById('cancel-order').addEventListener('click', closeOrderModal);
+  document.getElementById('close-success').addEventListener('click', closeSuccessModal);
+
+  // Order form submission
+  orderForm.addEventListener('submit', submitOrder);
+  
+  // Close modals when clicking outside
+  orderModal.addEventListener('click', (e) => {
+    if (e.target === orderModal) closeOrderModal();
+  });
+  
+  successModal.addEventListener('click', (e) => {
+    if (e.target === successModal) closeSuccessModal();
+  });
+}
+
+// Add item to order
+function addToOrder(itemId) {
+  const item = menuItems.find(i => i.id === itemId);
+  if (!item) return;
+
+  const existingItem = currentOrder.find(i => i.id === itemId);
+  if (existingItem) {
+    existingItem.quantity += 1;
+  } else {
+    currentOrder.push({
+      ...item,
+      quantity: 1
+    });
+  }
+
+  updateOrderSummary();
+  
+  // Show order summary
+  orderSummary.classList.remove('translate-y-full');
+  
+  // Show visual feedback
+  const button = document.querySelector(`.add-to-cart[data-id="${itemId}"]`);
+  const originalText = button.innerHTML;
+  button.innerHTML = 'Qo\'shildi!';
+  button.classList.add('bg-green-500');
+  
+  setTimeout(() => {
+    button.innerHTML = originalText;
+    button.classList.remove('bg-green-500');
+  }, 1000);
+}
+
+// Update order summary
+function updateOrderSummary() {
+  const totalItems = currentOrder.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = currentOrder.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  
+  itemCountElement.textContent = `${totalItems} ${totalItems === 1 ? 'item' : 'items'}`;
+  totalPriceElement.textContent = `${totalPrice.toLocaleString()} so'm`;
+  
+  // Update cart badge
+  if (totalItems > 0) {
+    cartBadge.textContent = totalItems;
+    cartBadge.classList.remove('hidden');
+  } else {
+    cartBadge.classList.add('hidden');
+  }
+  
+  // Update order items list
+  orderItemsList.innerHTML = '';
+  currentOrder.forEach(item => {
+    const itemElement = document.createElement('div');
+    itemElement.className = 'flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700';
+    itemElement.innerHTML = `
+      <div class="flex items-center">
+        <span class="text-sm font-medium">${item.quantity}x</span>
+        <span class="ml-2 text-sm">${item.name}</span>
+      </div>
+      <span class="text-sm font-medium">${(item.price * item.quantity).toLocaleString()} so'm</span>
+    `;
+    orderItemsList.appendChild(itemElement);
+  });
+  
+  // Enable/disable order button
+  orderBtn.disabled = totalItems === 0;
+  if (totalItems === 0) {
+    orderBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    orderSummary.classList.add('translate-y-full');
+  } else {
+    orderBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+  }
+}
+
+// Open order modal
+function openOrderModal() {
+  if (currentOrder.length === 0) return;
+  
+  // Update modal order summary
+  modalOrderSummary.innerHTML = '';
+  let total = 0;
+  
+  currentOrder.forEach(item => {
+    const itemTotal = item.price * item.quantity;
+    total += itemTotal;
+    
+    const itemElement = document.createElement('div');
+    itemElement.className = 'flex justify-between py-2 border-b border-gray-200 dark:border-gray-700';
+    itemElement.innerHTML = `
+      <div>
+        <span class="font-medium">${item.quantity}x ${item.name}</span>
+        <p class="text-gray-500 dark:text-gray-400 text-xs">${item.description}</p>
+      </div>
+      <span class="font-medium">${itemTotal.toLocaleString()} so'm</span>
+    `;
+    modalOrderSummary.appendChild(itemElement);
+  });
+  
+  modalTotalElement.textContent = `${total.toLocaleString()} so'm`;
+  orderModal.classList.remove('hidden');
+}
+
+// Close order modal
+function closeOrderModal() {
+  orderModal.classList.add('hidden');
+}
+
+// Close success modal
+function closeSuccessModal() {
+  successModal.classList.add('hidden');
+}
+
+// Submit order
+function submitOrder(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('name').value;
+  const phone = document.getElementById('phone').value;
+  const address = document.getElementById('address').value;
+  const notes = document.getElementById('notes').value;
+  
+  // In a real implementation, this would send the order to a Telegram group
+  // For now, we'll just log it and show success message
+  console.log('Order Details:', {
+    customer: { name, phone, address },
+    notes,
+    items: currentOrder,
+    total: currentOrder.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+  });
+  
+  // Show success modal
+  closeOrderModal();
+  successModal.classList.remove('hidden');
+  
+  // Reset order
+  currentOrder = [];
+  updateOrderSummary();
+  orderForm.reset();
+}
+
+// Initialize the app
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
